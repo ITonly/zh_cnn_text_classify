@@ -14,6 +14,7 @@ import json
  
 from gensim.models import Word2Vec
 from gensim.models.word2vec import LineSentence
+from gensim.models.keyedvectors import KeyedVectors
 
 def output_vocab(vocab):
     for k, v in vocab.items():
@@ -21,7 +22,8 @@ def output_vocab(vocab):
 
 def embedding_sentences(sentences, embedding_size = 128, window = 5, min_count = 5, file_to_load = None, file_to_save = None):
     if file_to_load is not None:
-        w2vModel = Word2Vec.load(file_to_load)
+         w2vModel = KeyedVectors.load_word2vec_format(file_to_load,binary=True)
+        # w2vModel = Word2Vec.load(file_to_load)
     else:
         w2vModel = Word2Vec(sentences, size = embedding_size, window = window, min_count = min_count, workers = multiprocessing.cpu_count())
         if file_to_save is not None:
@@ -61,7 +63,7 @@ def run_main():
  
     # check and process input arguments
     if len(sys.argv) < 4:
-        print globals()['__doc__'] % locals()
+        print(globals()['__doc__'] % locals())
         sys.exit(1)
     input_file, output_model_file, output_vector_file = sys.argv[1:4]
 

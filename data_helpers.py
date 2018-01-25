@@ -48,16 +48,16 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
     data_size = len(data)
     num_batches_per_epoch = int((data_size - 1) / batch_size) + 1
     for epoch in range(num_epochs):
+        # Shuffle the data at each epoch
         if shuffle:
-	    # Shuffle the data at each epoch
-	    shuffle_indices = np.random.permutation(np.arange(data_size))
-	    shuffled_data = data[shuffle_indices]
-	else:
-	    shuffled_data = data
-	for batch_num in range(num_batches_per_epoch):
-	    start_idx = batch_num * batch_size
-	    end_idx = min((batch_num + 1) * batch_size, data_size)
-	    yield shuffled_data[start_idx : end_idx]
+            shuffle_indices = np.random.permutation(np.arange(data_size))
+            shuffled_data = data[shuffle_indices]
+        else:
+            shuffled_data = data
+        for batch_num in range(num_batches_per_epoch):
+            start_idx = batch_num * batch_size
+            end_idx = min((batch_num + 1) * batch_size, data_size)
+            yield shuffled_data[start_idx:end_idx]
 
 def test():
     # Test clean_str
@@ -93,7 +93,7 @@ def clean_str(string):
     Tokenization/string cleaning for all datasets except for SST.
     Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
     """
-    string = re.sub(ur"[^\u4e00-\u9fff]", " ", string)
+    string = re.sub(r"[^\u4e00-\u9fff]", " ", string)
     #string = re.sub(r"[^A-Za-z0-9(),!?\'\`]", " ", string)
     #string = re.sub(r"\'s", " \'s", string)
     #string = re.sub(r"\'ve", " \'ve", string)
@@ -113,6 +113,7 @@ def clean_str(string):
 def saveDict(input_dict, output_file):
     with open(output_file, 'wb') as f:
         pickle.dump(input_dict, f) 
+
 
 def loadDict(dict_file):
     output_dict = None
